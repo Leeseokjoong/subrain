@@ -15,16 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const restartBtn = document.getElementById("restartBtn");
 
     // 변수 초기화
-    let words = [
-        ["apple", "사과"],
-        ["banana", "바나나"],
-        ["cherry", "체리"],
-        ["dog", "개"],
-        ["elephant", "코끼리"],
-        // ... 더 많은 단어를 추가할 수 있습니다.
-    ];
+    let words = [];
     let currentIndex = 0;
-    const wordsPerDay = 5; // 학습할 단어 수를 5개로 설정
+    const wordsPerDay = 5; // 학습할 단어 수
     let quizWords = [];
     let quizIndex = 0;
     let correctAnswers = 0;
@@ -33,11 +26,29 @@ document.addEventListener("DOMContentLoaded", () => {
     nextBtn.addEventListener("click", nextWord);
     restartBtn.addEventListener("click", restartQuiz);
 
+    // Excel 파일에서 단어 데이터 로드
+    async function loadWordData() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/leeseokjoong/subrain/main/predefined_words.xlsx');
+            const arrayBuffer = await response.arrayBuffer();
+            const data = new Uint8Array(arrayBuffer);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            words = XLSX.utils.sheet_to_json(sheet, { header: ['word', 'meaning'] });
+            words.shift(); // 첫 번째 행(헤더)을 제거합니다
+            showWord(currentIndex);
+        } catch (error) {
+            console.error('Error loading word data:', error);
+            alert('단어 데이터를 불러오는 데 실패했습니다. 나중에 다시 시도해주세요.');
+        }
+    }
+
     // 단어 표시 함수
     function showWord(index) {
         if (index < Math.min(words.length, wordsPerDay)) {
-            wordElement.textContent = words[index][0];
-            meaningElement.textContent = words[index][1];
+            wordElement.textContent = words[index].word;
+            meaningElement.textContent = words[index].meaning;
             updateProgressBar(index, wordsPerDay);
         } else {
             startQuiz();
@@ -70,12 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function showQuizWord(index) {
         if (index < quizWords.length) {
             const currentWord = quizWords[index];
-            quizWordElement.textContent = currentWord[0];
+            quizWordElement.textContent = currentWord.word;
             
-            const correctAnswer = currentWord[1];
+            const correctAnswer = currentWord.meaning;
             const choices = [correctAnswer];
             while (choices.length < 4) {
-                const randomChoice = words[Math.floor(Math.random() * words.length)][1];
+                const randomChoice = words[Math.floor(Math.random() * words.length)].meaning;
                 if (!choices.includes(randomChoice)) {
                     choices.push(randomChoice);
                 }
@@ -144,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 초기화 함수
     function init() {
-        showWord(currentIndex);
+        loadWordData();
     }
 
     // 초기화 실행
