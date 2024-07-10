@@ -3,63 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>수브레인 영단어</title>
+    <title>영단어 학습 프로그램</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
-        <h1>수브레인 영단어</h1>
-        <div id="loginForm">
-            <input type="text" id="username" placeholder="사용자 이름">
-            <input type="password" id="password" placeholder="비밀번호">
-            <select id="userType">
-                <option value="student">학생</option>
-                <option value="admin">관리자</option>
-            </select>
-            <button id="loginBtn">로그인</button>
-        </div>
-        <div id="studentContent" style="display: none;">
-            <div id="word"></div>
-            <div id="meaning"></div>
-            <div id="progress">
-                <div id="progressBar"></div>
+        <h1>영단어 학습 프로그램</h1>
+        <div id="content">
+            <div id="wordSection">
+                <div id="word"></div>
+                <div id="meaning"></div>
+                <div id="progress">
+                    <div id="progressBar"></div>
+                </div>
+                <button id="nextBtn">다음 단어</button>
             </div>
             <div id="quiz" style="display: none;">
                 <div id="quizWord"></div>
                 <div id="choices"></div>
                 <div id="quizFeedback"></div>
+                <div id="quizProgress">
+                    <div id="quizProgressBar"></div>
+                </div>
             </div>
-        </div>
-        <div id="adminContent" style="display: none;">
-            <h2>관리자 대시보드</h2>
-            <div id="wordManagement">
-                <h3>단어 파일 관리</h3>
-                <input type="file" id="wordFileInput" accept=".xlsx, .xls">
-                <button id="uploadWordFile">단어 파일 업로드</button>
-                <button id="downloadWordFile">현재 단어 파일 다운로드</button>
-            </div>
-            <div id="studentManagement">
-                <h3>학생 관리</h3>
-                <input type="text" id="newStudentName" placeholder="새 학생 이름">
-                <button id="addStudentBtn">학생 추가</button>
-            </div>
-            <div id="studentMonitoring">
-                <h3>학생 학습 현황</h3>
-                <table id="studentTable">
-                    <thead>
-                        <tr>
-                            <th>학생 이름</th>
-                            <th>학습 진도</th>
-                            <th>퀴즈 정답률</th>
-                            <th>관리</th>
-                        </tr>
-                    </thead>
-                    <tbody id="studentTableBody"></tbody>
-                </table>
+            <div id="results" style="display: none;">
+                <h2>퀴즈 결과</h2>
+                <p id="score"></p>
+                <button id="restartBtn">다시 시작</button>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
